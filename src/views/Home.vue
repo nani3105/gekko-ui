@@ -1,18 +1,33 @@
-<template>
-  <div class="home">
-    <img src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+<template lang='pug'>
+  section.contain.grd-row
+    .grd-row-col-3-6(v-html='left')
+    .grd-row-col-3-6.txt--center
+      img(src='../assets/gekko.jpg')
+      p
+        em The most valuable commodity I know of is information.
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
+import * as marked from 'marked';
 
-@Component({
-  components: {
-    HelloWorld,
-  },
-})
-export default class Home extends Vue {}
+const left = marked(`
+## Gekko
+Gekko is a Bitcoin trading bot and backtesting platform that
+connects to popular Bitcoin exchanges. It is written in javascript
+and runs on nodejs.
+[Find out more](https://gekko.wizb.it/).
+*Gekko is 100% open source and free, if you paid for this you have been scammed.*
+`);
+
+@Component({})
+export default class Home extends Vue {
+  private left: string;
+
+  constructor() {
+    super();
+    this.left = left;
+  }
+
+}
 </script>

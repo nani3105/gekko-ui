@@ -1,50 +1,47 @@
 <template lang="pug">
   div
-    h3 Select a dataset
-    .txt--center.my2(v-if='datasetScanstate === "idle"')
-      a.w100--s.btn--primary.scan-btn(href='#', v-on:click.prevent='scan') Scan available data
-    .txt--center.my2.spinner-container(v-if='datasetScanstate === "scanning"')
-      spinner
-    .my2(v-if='datasetScanstate === "scanned"')
+    v-toolbar
+      v-toolbar-title Dataset
+      v-spacer
+      v-tooltip(bottom)
+        v-btn(icon slot="activator" @click.prevent='scan')
+          v-icon gps_fixed
+        span Scan Dataset
+      v-tooltip(bottom)
+        v-btn(icon slot="activator" to='/data/importer')
+          v-icon launch
+        span Add New Import
 
-      div(v-if='datasets.length != 0')
-        table.full
-          thead
-            tr
-              th
-              th exchange
-              th currency
-              th asset
-              th from
-              th to
-              th duration
-          tbody
-            tr(v-for='(set, i) in datasets')
-              td.radio
-                input(type='radio', name='dataset', :value='i', v-model='setIndex', v-bind:id='set.id')
-              td
-                label(v-bind:for='set.id') {{ set.exchange }}
-              td
-                label(v-bind:for='set.id') {{ set.currency }}
-              td
-                label(v-bind:for='set.id') {{ set.asset }}
-              td
-                label(v-bind:for='set.id') {{ fmt(set.from) }}
-              td
-                label(v-bind:for='set.id') {{ fmt(set.to) }}
-              td
-                label(v-bind:for='set.id') {{ humanizeDuration(set.to.diff(set.from)) }}
-        a.btn--primary(href='#', v-on:click.prevent='openRange', v-if='!rangeVisible') Adjust range
-        template(v-if='rangeVisible')
-          div
-            label(for='customFrom') From:
-            input(v-model='customFrom')
-          div
-            label(for='customTo') To:
-            input(v-model='customTo')
+    v-data-table(:headers="headers" :items="datasets" class="elevation-1")
+      template(slot="items" slot-scope="props")
+        tr
+          td
+            v-radio-group(v-model="setIndex" name="rowSelector")
+              v-radio(:value="props.item.id")
+          td {{ props.item.exchange }}
+          td
+            crypto-icon(:asset="props.item.currency")
+          td
+            crypto-icon(:asset="props.item.asset")
+          td {{ fmt(props.item.from) }}
+          td {{ fmt(props.item.to) }}
+          td {{ humanizeDuration(props.item.to.diff(props.item.from)) }}
+      template(slot="no-data")
+        v-alert(:value="true" color="error" icon="warning") Sorry, nothing to display here :(
 
-    em(v-else) No Data found
-      a(href='#/data/importer') Lets add some
+    div.adjust-range
+      v-btn(color="blue-grey" class="white--text" @click.prevent='openRange' v-if='!rangeVisible') Adjust Range
+        v-icon(right dark) date_range
+    template(v-if='rangeVisible')
+      v-layout(row)
+        v-flex(xs2)
+          v-subheader From:
+        v-flex(xs4)
+          v-text-field(v-model='customFrom' hint="YYYY-MM-DD HH:mm" persistent-hint)
+        v-flex(xs2)
+          v-subheader To:
+        v-flex(xs4)
+          v-text-field(v-model='customTo' hint="YYYY-MM-DD HH:mm" persistent-hint)
 </template>
 
 <script lang="ts">
@@ -52,19 +49,33 @@ import { Vue, Watch } from 'vue-property-decorator';
 import { Component, Mixins } from 'vue-mixin-decorator';
 import { Dataset } from '../mixins/dataset';
 import spinner from '@/components/global/blockSpinner.vue';
+import cryptoIcon from '@/components/global/cryptoIcon.vue';
 import * as moment from 'moment';
-import humanizeDuration from 'humanize-duration';
+const humanizeDuration = require('humanize-duration');
+import _ from 'lodash';
 
 @Component({
   name: 'dataset-picker',
   components: {
     spinner,
+    cryptoIcon
   },
 })
 export default class Datasetpicker extends Mixins<Dataset>(Dataset) {
+
+  private headers = [
+    { text: '', value: '', sortable: false },
+    { text: 'Exchange', value: 'exchange' },
+    { text: 'Currency', value: 'currency' },
+    { text: 'Asset', value: 'asset' },
+    { text: 'From', value: 'from' },
+    { text: 'To', value: 'to' },
+    { text: 'Duration', value: '' }
+  ];
+
   public setIndex = -1;
   public rangeVisible = false;
-  public set: any = false;
+  public set: boolean = false;
   public customTo: string | boolean = false;
   public customFrom: string | boolean = false;
 
@@ -107,7 +118,7 @@ export default class Datasetpicker extends Mixins<Dataset>(Dataset) {
 
   @Watch('setIndex')
   private setIndexWatcher() {
-    this.set = this.datasets[this.setIndex];
+    this.set = _.find(this.datasets, dataset => dataset.id === this.setIndex);
     this.updateCustomRange();
     this.emitSet(this.set);
   }
@@ -138,6 +149,10 @@ export default class Datasetpicker extends Mixins<Dataset>(Dataset) {
       display: inline;
       font-size: 1em;
     }
+  }
+
+  .adjust-range {
+    text-align: left;
   }
 </style>
 

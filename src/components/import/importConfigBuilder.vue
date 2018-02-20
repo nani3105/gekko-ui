@@ -8,3 +8,55 @@
       range-creator(v-on:range='updateRange')
 </template>
 
+<script lang="ts">
+import {Component, Vue} from 'vue-property-decorator';
+import marketPicker from '@/components/global/config-builder/marketpicker.vue';
+import rangeCreator from '@/components/global/config-builder/rangecreator.vue';
+
+@Component({
+  components: {
+    marketPicker,
+    rangeCreator,
+  }
+})
+export default class ImportConfigBuilder extends Vue {
+
+  private market: any = {};
+  private range: any = {};
+
+  get config() {
+    let config = {};
+
+    Object.assign(
+      config,
+      this.market,
+      {
+        importer: {
+          daterange: this.range
+        }
+      },
+      {
+        candleWriter: { enabled: true }
+      }
+    );
+    return config;
+  }
+
+  private updateMarketConfig(mc) {
+    this.market = mc;
+    this.emitConfig();
+  }
+
+  private updateRange(range) {
+    this.range = range;
+    this.emitConfig();
+  }
+
+  private emitConfig() {
+    this.$emit('config', this.config);
+  }
+
+}
+</script>
+
+

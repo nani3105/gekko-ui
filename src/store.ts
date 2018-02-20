@@ -5,10 +5,12 @@ import _ from 'lodash';
 Vue.use(Vuex);
 
 import * as importMutations from './store/modules/imports/mutations';
+import * as configMutations from './store/modules/config/mutations';
 
 const mutations = {};
 
 _.merge(mutations, importMutations);
+_.merge(mutations, configMutations);
 
 export default new Vuex.Store({
   state: {

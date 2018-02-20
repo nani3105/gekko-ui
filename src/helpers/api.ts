@@ -21,7 +21,7 @@ const endpoint = `${config.host}${config.port === 80 ? '' : `:${config.port}`}${
 
 let basePath;
 let restPath: string;
-let wsPath;
+let wsPath: string;
 
 // rest API path
 if ( config.ssl) {

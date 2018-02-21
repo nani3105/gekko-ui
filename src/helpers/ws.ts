@@ -22,32 +22,35 @@ export const connect = () => {
   }, 500);
 
   socket.onopen = () => {
-    if(info.connected)
+    if (info.connected) {
       return;
+    }
 
     info.connected = true;
     bus.$emit('WS_STATUS_CHANGE', info);
     initializeState();
-  }
+  };
 
   socket.onclose = () => {
-    if(!info.connected)
+    if (!info.connected) {
       return;
+    }
 
     info.connected = false;
     bus.$emit('WS_STATUS_CHANGE', info);
-  }
+  };
 
   socket.onerror = () => {
-    if(!info.connected)
+    if (!info.connected) {
       return;
+    }
 
     info.connected = false;
     bus.$emit('WS_STATUS_CHANGE', info);
-  }
+  };
 
-  socket.onmessage = function(message: any) {
-    let payload = JSON.parse(message.data);
+  socket.onmessage = (message: any) => {
+    const payload = JSON.parse(message.data);
     bus.$emit(payload.type, payload);
   };
 };

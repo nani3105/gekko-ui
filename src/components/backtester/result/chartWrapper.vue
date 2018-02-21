@@ -8,7 +8,7 @@
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 const d3 = require('d3');
 import chart from '@/d3/chart4';
-import { draw as drawMessage, clear as clearMessage } from '@/d3/message'
+import { draw as drawMessage, clear as clearMessage } from '@/d3/message';
 
 const MIN_CANDLES = 4;
 @Component({})
@@ -24,7 +24,7 @@ export default class chartWrapper extends Vue {
   }
 
   private created() {
-    let self = this;
+    const self = this;
     setTimeout(self.foo, 100);
   }
 
@@ -38,7 +38,7 @@ export default class chartWrapper extends Vue {
 
   private foo() {
     this.remove();
-    if(_.size(this.data.candles) < MIN_CANDLES) {
+    if (_.size(this.data.candles) < MIN_CANDLES) {
       drawMessage('Not enough data to spawn chart');
     } else {
       chart(this.data.candles, this.data.trades, this.height);

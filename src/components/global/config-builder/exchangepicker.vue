@@ -12,29 +12,32 @@ import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 import _ from 'lodash';
 
 @Component({})
-export default class exchangePicker extends Vue {
+export default class ExchangePicker extends Vue {
   @Prop() private onlyTradable: string;
   @Prop() private onlyImportable: any;
 
   private exchange = 'poloniex';
 
   get exchanges() {
-    let exchanges = Object.assign({}, this.$store.state.exchanges);
+    const exchanges = Object.assign({}, this.$store.state.exchanges);
 
-    if(_.isEmpty(exchanges))
+    if (_.isEmpty(exchanges)) {
       return false;
+    }
 
-    if(this.onlyTradable) {
+    if (this.onlyTradable) {
       _.each(exchanges, (e, name) => {
-        if(!e.tradable)
+        if (!e.tradable) {
           delete exchanges[name];
+        }
       });
     }
 
-    if(this.onlyImportable) {
+    if (this.onlyImportable) {
       _.each(exchanges, (e, name) => {
-        if(!e.importable)
+        if (!e.importable) {
           delete exchanges[name];
+        }
       });
     }
 

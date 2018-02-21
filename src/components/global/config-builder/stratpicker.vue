@@ -31,9 +31,8 @@ div
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import _ from 'lodash';
 import {get} from '@/helpers/ajax';
-
-const humanizeDuration = require('humanize-duration');
-const toml = require('toml');
+import * as humanizeDuration from 'humanize-duration';
+import * as toml from 'toml';
 
 @Component({
 
@@ -65,12 +64,13 @@ export default class StratPicker extends Vue {
   ];
 
   get candleSize() {
-    if(this.candleSizeUnit === 'minutes')
+    if (this.candleSizeUnit === 'minutes') {
       return this.rawCandleSize;
-    else if(this.candleSizeUnit === 'hours')
+    } else if (this.candleSizeUnit === 'hours') {
       return this.rawCandleSize * 60;
-    else if(this.candleSizeUnit === 'days')
+    } else if (this.candleSizeUnit === 'days') {
       return this.rawCandleSize * 60 * 24;
+    }
   }
 
   get singularCandleSizeUnit() {
@@ -78,28 +78,29 @@ export default class StratPicker extends Vue {
   }
 
   get config() {
-    let config = {
+    const config = {
       tradingAdvisor: {
         enabled: true,
         method: this.strategy,
         candleSize: +this.candleSize,
-        historySize: +this.historySize
-      }
-    }
-    if(this.emptyStrat)
-      config[this.strategy] = {__empty: true}
-    else
+        historySize: +this.historySize,
+      },
+    };
+    if (this.emptyStrat) {
+      config[this.strategy] = {__empty: true};
+    } else {
       config[this.strategy] = this.stratParams;
-      return config;
+    }
+    return config;
   }
 
-  humanizeDuration (n) { return humanizeDuration(n); }
+  public humanizeDuration(n) { return humanizeDuration(n); }
 
-  created() {
+  public created() {
     get('strategies', (err: any, data: any) => {
       this.strategies = data;
 
-      _.each(this.strategies, function(s) {
+      _.each(this.strategies, (s) => {
           s.empty = s.params === '';
       });
 
@@ -109,16 +110,16 @@ export default class StratPicker extends Vue {
     });
   }
 
-  emitConfig() {
+  public emitConfig() {
     this.parseParams();
     this.$emit('stratConfig', this.config);
   }
 
-  parseParams() {
+  public parseParams() {
     try {
       this.stratParams = toml.parse(this.rawStratParams);
       this.rawStratParamsError = false;
-    } catch(e) {
+    } catch (e) {
       this.rawStratParamsError = e;
       this.stratParams = {};
     }

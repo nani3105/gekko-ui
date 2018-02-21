@@ -21,7 +21,6 @@
 </template>
 
 <script lang="ts">
-
 import { Component, Vue, Prop } from 'vue-property-decorator';
 
 @Component({})
@@ -37,10 +36,11 @@ export default class PaperTradeSummary extends Vue {
   }
 
   get profitClass() {
-    if(this.report.relativeProfit > 0)
-      return 'profit'
-    else
-      return 'loss'
+    if (this.report.relativeProfit > 0) {
+      return 'profit';
+    } else {
+      return 'loss';
+    }
   }
 }
 </script>

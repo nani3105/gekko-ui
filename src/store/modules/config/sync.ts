@@ -10,7 +10,7 @@ const transformMarkets = (backendData: any) => {
     exchangesTemp[e.slug] = exchangesTemp[e.slug] || {markets: {}};
 
     e.markets.forEach( (pair: any) => {
-      const [ currency, asset ] = pair['pair'];
+      const [ currency, asset ] = pair.pair;
       exchangesTemp[e.slug].markets[currency] = exchangesTemp[e.slug].markets[currency] || [];
       exchangesTemp[e.slug].markets[currency].push( asset );
     });
@@ -21,7 +21,7 @@ const transformMarkets = (backendData: any) => {
   });
 
   return exchangesTemp;
-}
+};
 
 function init() {
   get('apiKeys', (err, resp) => {

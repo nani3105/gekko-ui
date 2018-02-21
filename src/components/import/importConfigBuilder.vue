@@ -17,7 +17,7 @@ import rangeCreator from '@/components/global/config-builder/rangecreator.vue';
   components: {
     marketPicker,
     rangeCreator,
-  }
+  },
 })
 export default class ImportConfigBuilder extends Vue {
 
@@ -25,19 +25,19 @@ export default class ImportConfigBuilder extends Vue {
   private range: any = {};
 
   get config() {
-    let config = {};
+    const config = {};
 
     Object.assign(
       config,
       this.market,
       {
         importer: {
-          daterange: this.range
-        }
+          daterange: this.range,
+        },
       },
       {
-        candleWriter: { enabled: true }
-      }
+        candleWriter: { enabled: true },
+      },
     );
     return config;
   }

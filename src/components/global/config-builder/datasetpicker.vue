@@ -51,17 +51,23 @@ import { Dataset } from '../mixins/dataset';
 import spinner from '@/components/global/blockSpinner.vue';
 import cryptoIcon from '@/components/global/cryptoIcon.vue';
 import * as moment from 'moment';
-const humanizeDuration = require('humanize-duration');
+import * as humanizeDuration from 'humanize-duration';
 import _ from 'lodash';
 
 @Component({
   name: 'dataset-picker',
   components: {
     spinner,
-    cryptoIcon
+    cryptoIcon,
   },
 })
 export default class Datasetpicker extends Mixins<Dataset>(Dataset) {
+
+  public setIndex = -1;
+  public rangeVisible = false;
+  public set: boolean | any = false;
+  public customTo: string | boolean = false;
+  public customFrom: string | boolean = false;
 
   private headers = [
     { text: '', value: '', sortable: false },
@@ -70,14 +76,8 @@ export default class Datasetpicker extends Mixins<Dataset>(Dataset) {
     { text: 'Asset', value: 'asset' },
     { text: 'From', value: 'from' },
     { text: 'To', value: 'to' },
-    { text: 'Duration', value: '' }
+    { text: 'Duration', value: '' },
   ];
-
-  public setIndex = -1;
-  public rangeVisible = false;
-  public set: boolean = false;
-  public customTo: string | boolean = false;
-  public customFrom: string | boolean = false;
 
   public fmt(mom: any) {
     return mom.utc().format('YYYY-MM-DD HH:mm');
@@ -118,7 +118,7 @@ export default class Datasetpicker extends Mixins<Dataset>(Dataset) {
 
   @Watch('setIndex')
   private setIndexWatcher() {
-    this.set = _.find(this.datasets, dataset => dataset.id === this.setIndex);
+    this.set = _.find(this.datasets, (dataset) => dataset.id === this.setIndex);
     this.updateCustomRange();
     this.emitSet(this.set);
   }

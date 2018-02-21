@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import Navigation from '@/components/layout/navigation';
+import Navigation from '@/components/layout/navigation.vue';
 
 @Component({
   name: 'App',

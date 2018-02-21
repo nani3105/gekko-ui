@@ -17,7 +17,7 @@ import chart from './chartWrapper.vue';
   components: {
     resultSummary,
     chart,
-  }
+  },
 })
 export default class Results extends Vue {
   @Prop() private result: any;

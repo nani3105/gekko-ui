@@ -11,7 +11,7 @@ const config =
   },
   ui: {
     ssl: false,
-    host: 'localhost',
+    host: 'ec2-34-210-9-52.us-west-2.compute.amazonaws.com', // ec2-34-210-9-52.us-west-2.compute.amazonaws.com
     port: 3000,
     path: '/',
   },

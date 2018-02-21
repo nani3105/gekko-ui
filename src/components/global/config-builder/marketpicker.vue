@@ -53,20 +53,23 @@ export default class MarketPicker extends Vue {
   get exchanges() {
     const exchanges = Object.assign({}, this.$store.state.exchanges);
 
-    if(_.isEmpty(exchanges))
+    if (_.isEmpty(exchanges)) {
       return false;
+    }
 
-    if(this.onlyTradable) {
+    if (this.onlyTradable) {
       _.each(exchanges, (e, name) => {
-        if(!e.tradable)
+        if (!e.tradable) {
           delete exchanges[name];
+        }
       });
     }
 
-    if(this.onlyImportable) {
+    if (this.onlyImportable) {
       _.each(exchanges, (e, name) => {
-        if(!e.importable)
+        if (!e.importable) {
           delete exchanges[name];
+        }
       });
     }
     return exchanges;
@@ -98,8 +101,8 @@ export default class MarketPicker extends Vue {
         exchange: this.exchange,
         currency: this.currency,
         asset: this.asset,
-      }
-    }
+      },
+    };
   }
 
   @Watch('currency')

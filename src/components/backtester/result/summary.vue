@@ -34,12 +34,12 @@ import paperTradeSummary from '@/components/global/paperTradeSummary.vue';
 @Component({
   components: {
     paperTradeSummary,
-  }
+  },
 })
 export default class Summary extends Vue {
   @Prop('report') private report: any;
 
-  round(n) {
+  public round(n) {
     return (+n).toFixed(5);
   }
 }

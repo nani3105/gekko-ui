@@ -39,12 +39,14 @@ export default class Config extends Vue {
   }
 
   private removeApiKey(exchange: string) {
-    if(!confirm('Are you sure you want to delete these API keys?'))
+    if (!confirm('Are you sure you want to delete these API keys?')) {
       return;
+    }
 
     post('removeApiKey', {exchange}, (error: any, response: any) => {
-      if(error)
+      if (error) {
         return alert(error);
+      }
     });
   }
 

@@ -8,4 +8,4 @@ export const syncApiKeys = (state: any, apiKeys: any) => {
 export const syncExchanges = (state: any, exchanges: any) => {
   Vue.set(state, 'exchanges', exchanges);
   return state;
-}
+};

@@ -6,13 +6,13 @@ const init = () => {
   get('imports', (err: any, resp: any) => {
     store.commit('syncImports', resp);
   });
-}
+};
 
 const sync = () => {
   bus.$on('import_update', (data: any) => {
     store.commit('updateImport', data);
   });
-}
+};
 
 
 export default function() {

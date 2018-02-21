@@ -21,8 +21,8 @@ export default class RangeCreator extends Vue {
   private to = '';
 
   private created() {
-    let now = moment().startOf('minute');
-    let then = now.clone().subtract(3, 'months');
+    const now = moment().startOf('minute');
+    const then = now.clone().subtract(3, 'months');
     this.to = this.fmt(now);
     this.from = this.fmt(then);
     this.emitRange();
@@ -39,19 +39,20 @@ export default class RangeCreator extends Vue {
   private emitRange() {
     this.$emit('range', {
       from: this.fmtTs(this.from),
-      to: this.fmtTs(this.to)
+      to: this.fmtTs(this.to),
     });
   }
 
   private emitManualEntry() {
-    if(this.from.length < '4' || this.from.length < '4')
+    if (this.from.length < 4 || this.from.length < 4) {
       return this.$emit('range', {});
-    let from = moment.utc(this.from);
-    let to = moment.utc(this.to);
-    if(from.isValid() && to.isValid()) {
+    }
+    const from = moment.utc(this.from);
+    const to = moment.utc(this.to);
+    if (from.isValid() && to.isValid()) {
       this.$emit('range', {
         from: this.fmt(from),
-        to: this.fmt(to)
+        to: this.fmt(to),
       });
     } else {
       this.$emit('range', {});
@@ -81,9 +82,10 @@ export default class RangeCreator extends Vue {
 
   @Watch('selectedRangeIndex')
   private selectedRangeIndexWatcher() {
-    let selectedRange = this.ranges[this.selectedRangeIndex];
-    if(selectedRange)
+    const selectedRange = this.ranges[this.selectedRangeIndex];
+    if (selectedRange) {
       this.emitRange(selectedRange);
+    }
   }
 }
 </script>

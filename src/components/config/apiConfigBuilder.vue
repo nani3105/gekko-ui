@@ -38,24 +38,26 @@ export default class ApiConfigBuilder extends Vue {
   }
 
   get requires() {
-    if(!this.exchanges)
+    if (!this.exchanges) {
       return [];
+    }
 
-    if(!this.exchange)
+    if (!this.exchange) {
       return [];
-    
+    }
+
     return this.exchanges[this.exchange].requires;
   }
 
   get config() {
-    let config = {
+    const config = {
       exchange: this.exchange,
-      values: this.credentials
+      values: this.credentials,
     };
     return config;
   }
 
-  updateExchange(exchange: string) {
+  public updateExchange(exchange: string) {
     this.credentials = {};
     this.exchange = exchange;
     this.emitConfig();
@@ -66,17 +68,19 @@ export default class ApiConfigBuilder extends Vue {
   }
 
   private upload() {
-    let exchange = this.config.exchange;
+    const exchange = this.config.exchange;
 
-    if(
+    if (
       this.exchanges &&
       this.apiKeySets.includes(exchange) &&
       !confirm(`You already have API keys for ${exchange} defined, do you want to overwrite them?`)
-    )
+    ) {
       return;
+    }
     post('addApiKey', this.config, (error, response) => {
-      if(error)
+      if (error) {
         return alert(error);
+      }
       this.credentials = {};
     });
   }

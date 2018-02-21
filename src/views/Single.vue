@@ -56,56 +56,64 @@ import _ from 'lodash';
   components: {
     progressBar,
     spinner,
-  }
+  },
 })
 export default class SingleImport extends Vue {
 
   get importData() {
     return _.find(
       this.$store.state.imports,
-      { id: this.$route.params.id }
+      { id: this.$route.params.id },
     );
   }
 
   get initialized() {
-    if(this.importData && this.latest.isValid())
+    if (this.importData && this.latest.isValid()) {
       return true;
+    }
   }
 
   get latest() {
-    if(this.importData)
+    if (this.importData) {
       return this.mom(this.importData.latest);
+    }
   }
 
   get fromEndMs() {
-    if(this.importData)
+    if (this.importData) {
       return this.to.diff(this.latest);
+    }
   }
 
   get fromEnd() {
-    if(!this.latest)
+    if (!this.latest) {
       return 'LOADING';
+    }
     return humanizeDuration(this.fromEndMs);
   }
 
   get from() {
-    if(this.importData)
+    if (this.importData) {
       return this.mom(this.importData.from);
+    }
   }
 
   get to() {
-    if(this.importData)
+    if (this.importData) {
       return this.mom(this.importData.to);
+    }
   }
 
   get timespan() {
-    if(this.importData)
+    if (this.importData) {
       return this.to.diff(this.from);
+    }
   }
 
   get progress() {
-    if(!this.importData)
+    if (!this.importData) {
       return;
+    }
     const current = this.timespan - this.fromEndMs;
     return 100 * current / this.timespan;
   }

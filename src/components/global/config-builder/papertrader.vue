@@ -12,14 +12,13 @@
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import {get} from '@/helpers/ajax';
-
-const toml = require('toml');
+import * as toml from 'toml';
 
 @Component({})
 export default class PaperTrader extends Vue {
   private rawPaperTraderParams = '';
   private rawPaperTraderParamsError = false;
-  private paperTraderParams = {};
+  private paperTraderParams: any = {};
   private toggle = 'closed';
 
   private created() {
@@ -29,10 +28,11 @@ export default class PaperTrader extends Vue {
   }
 
   private switchToggle() {
-    if(this.toggle === 'open')
+    if (this.toggle === 'open') {
       this.toggle = 'closed';
-    else
+    } else {
       this.toggle = 'open';
+    }
   }
 
   private emitConfig() {
@@ -45,15 +45,15 @@ export default class PaperTrader extends Vue {
       this.paperTraderParams = toml.parse(this.rawPaperTraderParams);
       this.paperTraderParams.reportRoundtrips = true;
       this.rawPaperTraderParamsError = false;
-    } catch(e) {
+    } catch (e) {
       this.rawPaperTraderParamsError = e;
       this.paperTraderParams = {};
     }
   }
 
   @Watch('rawPaperTraderParams')
-  rawPaperTraderParamsWatcher() {
-    this.emitConfig()
+  private rawPaperTraderParamsWatcher() {
+    this.emitConfig();
   }
 }
 </script>

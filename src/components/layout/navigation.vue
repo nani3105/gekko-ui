@@ -14,7 +14,7 @@ import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 @Component({})
 export default class Navigation extends Vue {
 
-  @Prop() drawer: boolean = true;
+  @Prop() public drawer: boolean = true;
 
   private items = [
       { text: 'Home', icon: 'home', link: '/home' },
@@ -26,7 +26,7 @@ export default class Navigation extends Vue {
   ];
 
   @Watch('drawer')
-  drawerWatcher(value) {
+  public drawerWatcher(value) {
     return value;
   }
 }

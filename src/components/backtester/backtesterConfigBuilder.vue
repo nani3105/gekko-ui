@@ -11,12 +11,11 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import datasetPicker from '@/components/global/config-builder/datasetpicker.vue';
-import stratPicker from '@/components/global/config-builder/stratpicker.vue'
+import stratPicker from '@/components/global/config-builder/stratpicker.vue';
 import paperTrader from '@/components/global/config-builder/papertrader.vue';
 import _ from 'lodash';
 import {get} from '@/helpers/ajax';
-
-const toml = require('toml');
+import * as toml from 'toml';
 
 @Component({
   name: 'config-builder',
@@ -30,8 +29,8 @@ export default class ConfigBuilder extends Vue {
 
   private dataset: any = {};
   private strat = {};
-  private paperTrader = {};
-  private performanceAnalyzer = {};
+  private paperTrader: any = {};
+  private performanceAnalyzer: any = {};
 
   private created() {
     get('configPart/performanceAnalyzer', (error, response) => {
@@ -41,13 +40,14 @@ export default class ConfigBuilder extends Vue {
   }
 
   get range() {
-    if(!this.dataset.exchange)
+    if (!this.dataset.exchange) {
       return {};
+    }
 
     return {
       from: this.dataset.from,
-      to: this.dataset.to
-    }
+      to: this.dataset.to,
+    };
   }
 
   get market() {
@@ -58,12 +58,12 @@ export default class ConfigBuilder extends Vue {
     return {
       exchange: this.dataset.exchange,
       currency: this.dataset.currency,
-      asset: this.dataset.asset
+      asset: this.dataset.asset,
     };
   }
 
   get config() {
-    let config = {};
+    const config: any = {};
     Object.assign(
       config,
       { watch: this.market },
@@ -71,10 +71,10 @@ export default class ConfigBuilder extends Vue {
       this.strat,
       {
         backtest: {
-          daterange: this.range
-        }
+          daterange: this.range,
+        },
       },
-      { performanceAnalyzer: this.performanceAnalyzer }
+      { performanceAnalyzer: this.performanceAnalyzer },
     );
 
     config.valid = this.validConfig(config);
@@ -83,24 +83,31 @@ export default class ConfigBuilder extends Vue {
   }
 
   private validConfig(config) {
-    if(!config.backtest)
+    if (!config.backtest) {
       return false;
-    if(!config.backtest.daterange)
+    }
+    if (!config.backtest.daterange) {
       return false;
-    if(_.isEmpty(config.backtest.daterange))
+    }
+    if (_.isEmpty(config.backtest.daterange)) {
       return false;
-    if(!config.watch)
+    }
+    if (!config.watch) {
       return false;
-    if(!config.tradingAdvisor)
+    }
+    if (!config.tradingAdvisor) {
       return false;
-    let strat = config.tradingAdvisor.method;
-    if(_.isEmpty(config[ strat ]))
+    }
+    const strat = config.tradingAdvisor.method;
+    if (_.isEmpty(config[ strat ])) {
       return false;
-    if(config.tradingAdvisor) {
-      if(_.isNaN(config.tradingAdvisor.candleSize))
+    }
+    if (config.tradingAdvisor) {
+      if (_.isNaN(config.tradingAdvisor.candleSize)) {
         return false;
-      else if(config.tradingAdvisor.candleSize == 0)
+      } else if (config.tradingAdvisor.candleSize === 0) {
         return false;
+      }
     }
     return true;
   }
